@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.ArrayList;
 /**
  *
- * @author User
+ * @author fernandoenad
  */
-public class ContactDAOImpl implements ContactDAO {
+public class ContactDAOImpl implements ContactDAO{
     private final List<Contact> contacts = new ArrayList<>();
     private static final Path DATA_FILE = Paths.get("db.dat");
     

@@ -5,11 +5,12 @@
 package cmsa;
 
 import java.io.Serializable;
+
 /**
  *
- * @author User
+ * @author fernandoenad
  */
-public class Group implements Serializable {
+public class Group implements Serializable{
     private static final long serialVersionUID = 1L;
     
     private String groupId;
@@ -35,4 +36,9 @@ public class Group implements Serializable {
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
+    
+    public String toString() {
+        return this.groupName;
+    }
+    
 }

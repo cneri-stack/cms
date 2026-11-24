@@ -5,17 +5,69 @@
 
 package cmsa;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
- * @author User
+ * @author fernandoenad
  */
 public class FrmMain2 extends javax.swing.JFrame {
-
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMain2.class.getName());
-
-    /** Creates new form FrmMain2 */
+    ContactDAOImpl contactDAOImpl = new ContactDAOImpl();
+    GroupDAOImpl groupDAOImpl = new GroupDAOImpl();
+    String phoneNumber;
+    String groupId;
+    /**
+     * Creates new form FrmMain2
+     */
     public FrmMain2() {
         initComponents();
+        loadContacts("*");
+        loadGroups("*");
+    }
+
+    void loadContacts(String keyword){
+        DefaultTableModel model = (DefaultTableModel) tblContacts.getModel();
+        model.setRowCount(0);
+        
+        if(keyword.equals("*")){
+            for(Contact contact : this.contactDAOImpl.getAllContacts()){
+                model.addRow(new Object[]{
+                    contact.getPhoneNumber(), 
+                    contact.getFirstname(), 
+                    contact.getLastname(),
+                    contact.getGroupId()});
+            }
+        } else {
+            for(Contact contact : this.contactDAOImpl.searchContacts(keyword)){
+                model.addRow(new Object[]{
+                    contact.getPhoneNumber(), 
+                    contact.getFirstname(), 
+                    contact.getLastname(),
+                    contact.getGroupId()});
+            }
+        }
+    }
+    
+    void loadGroups(String keyword){
+        DefaultTableModel model = (DefaultTableModel) tblGroups.getModel();
+        model.setRowCount(0);
+        
+        if(keyword.equals("*")){
+            for(Group group : this.groupDAOImpl.getAllGroups()){
+                model.addRow(new Object[]{
+                    group.getGroupId(), 
+                    group.getGroupName()});
+            }
+        } else {
+            for(Group group : this.groupDAOImpl.searchGroups(keyword)){
+                model.addRow(new Object[]{
+                    group.getGroupId(), 
+                    group.getGroupName()});
+            }
+        }
     }
 
     /** This method is called from within the constructor to
@@ -27,21 +79,328 @@ public class FrmMain2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pmnuContacts = new javax.swing.JPopupMenu();
+        pmnuiContactsEdit = new javax.swing.JMenuItem();
+        pmnuiContactsDelete = new javax.swing.JMenuItem();
+        pmnuGroups = new javax.swing.JPopupMenu();
+        pmnuiGroupsEdit = new javax.swing.JMenuItem();
+        pmnuiGroupsDelete = new javax.swing.JMenuItem();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        pnlContacts = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        tfSearchContact = new javax.swing.JTextField();
+        btnNewContact = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblContacts = new javax.swing.JTable();
+        pnlGroups = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        tfSearchGroup = new javax.swing.JTextField();
+        btnNewGroup = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblGroups = new javax.swing.JTable();
+
+        pmnuiContactsEdit.setText("Edit");
+        pmnuiContactsEdit.addActionListener(this::pmnuiContactsEditActionPerformed);
+        pmnuContacts.add(pmnuiContactsEdit);
+
+        pmnuiContactsDelete.setText("Delete");
+        pmnuiContactsDelete.addActionListener(this::pmnuiContactsDeleteActionPerformed);
+        pmnuContacts.add(pmnuiContactsDelete);
+
+        pmnuiGroupsEdit.setText("Edit");
+        pmnuiGroupsEdit.addActionListener(this::pmnuiGroupsEditActionPerformed);
+        pmnuGroups.add(pmnuiGroupsEdit);
+
+        pmnuiGroupsDelete.setText("Delete");
+        pmnuiGroupsDelete.addActionListener(this::pmnuiGroupsDeleteActionPerformed);
+        pmnuGroups.add(pmnuiGroupsDelete);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Search");
+
+        tfSearchContact.addCaretListener(this::tfSearchContactCaretUpdate);
+
+        btnNewContact.setText("New Contact");
+        btnNewContact.addActionListener(this::btnNewContactActionPerformed);
+
+        tblContacts.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Phone Number", "First Name", "Last Name", "Group Id"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblContacts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblContactsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblContacts);
+        if (tblContacts.getColumnModel().getColumnCount() > 0) {
+            tblContacts.getColumnModel().getColumn(0).setResizable(false);
+            tblContacts.getColumnModel().getColumn(1).setResizable(false);
+            tblContacts.getColumnModel().getColumn(2).setResizable(false);
+            tblContacts.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        javax.swing.GroupLayout pnlContactsLayout = new javax.swing.GroupLayout(pnlContacts);
+        pnlContacts.setLayout(pnlContactsLayout);
+        pnlContactsLayout.setHorizontalGroup(
+            pnlContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContactsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
+                    .addGroup(pnlContactsLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(tfSearchContact, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnNewContact)))
+                .addContainerGap())
+        );
+        pnlContactsLayout.setVerticalGroup(
+            pnlContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContactsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlContactsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tfSearchContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNewContact))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Contacts", pnlContacts);
+
+        jLabel2.setText("Search");
+
+        tfSearchGroup.addCaretListener(this::tfSearchGroupCaretUpdate);
+
+        btnNewGroup.setText("New Contact Group");
+        btnNewGroup.addActionListener(this::btnNewGroupActionPerformed);
+
+        tblGroups.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Group Id", "Group Name"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblGroups.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblGroupsMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblGroups);
+        if (tblGroups.getColumnModel().getColumnCount() > 0) {
+            tblGroups.getColumnModel().getColumn(0).setResizable(false);
+            tblGroups.getColumnModel().getColumn(1).setResizable(false);
+        }
+
+        javax.swing.GroupLayout pnlGroupsLayout = new javax.swing.GroupLayout(pnlGroups);
+        pnlGroups.setLayout(pnlGroupsLayout);
+        pnlGroupsLayout.setHorizontalGroup(
+            pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGroupsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(pnlGroupsLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(tfSearchGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                        .addComponent(btnNewGroup)))
+                .addContainerGap())
+        );
+        pnlGroupsLayout.setVerticalGroup(
+            pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGroupsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(tfSearchGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNewGroup))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Groups", pnlGroups);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNewGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewGroupActionPerformed
+        // TODO add your handling code here:
+        FrmGroupNew frmGroupNew = new FrmGroupNew(this, true);
+        frmGroupNew.setVisible(true);
+        
+        if(frmGroupNew.getGroup() == null){
+            return;
+        }
+        
+        if(this.groupDAOImpl.addGroup(frmGroupNew.getGroup()) == true){
+            loadGroups("*");
+            JOptionPane.showMessageDialog(null, "Group successfully saved!", "System information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error encountered, group not saved!", "System information", JOptionPane.WARNING_MESSAGE);
+        }  
+    }//GEN-LAST:event_btnNewGroupActionPerformed
+
+    private void btnNewContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewContactActionPerformed
+        // TODO add your handling code here:
+        FrmContactNew frmNewContact = new FrmContactNew(this, true, this.groupDAOImpl.getAllGroups());
+        frmNewContact.setVisible(true);
+        
+        if(frmNewContact.getContact() == null){
+            return;
+        }
+        
+        if(this.contactDAOImpl.addContact(frmNewContact.getContact()) == true){
+            loadContacts("*");
+            JOptionPane.showMessageDialog(null, "Contact successfully saved!", "System information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error encountered, contact not saved!", "System information", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnNewContactActionPerformed
+
+    private void tfSearchContactCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfSearchContactCaretUpdate
+        // TODO add your handling code here:
+        String keyword = tfSearchContact.getText();
+        loadContacts(keyword);
+    }//GEN-LAST:event_tfSearchContactCaretUpdate
+
+    private void pmnuiContactsEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmnuiContactsEditActionPerformed
+        // TODO add your handling code here:
+        int index = contactDAOImpl.getIndex(this.phoneNumber);
+        Contact contact = contactDAOImpl.getAllContacts().get(index);
+        
+        FrmContactEdit frmEditContact = new FrmContactEdit(this, true, contact);
+        frmEditContact.setVisible(true);
+        
+        if(frmEditContact.getUpdated() == false){
+            return;
+        }
+        
+        if(this.contactDAOImpl.updateContact(this.phoneNumber, frmEditContact.getContact()) == true){
+            loadContacts("*");
+            JOptionPane.showMessageDialog(null, "Contact successfully updated!", "System information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error encountered, contact not udpated!", "System information", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_pmnuiContactsEditActionPerformed
+
+    private void pmnuiContactsDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmnuiContactsDeleteActionPerformed
+        // TODO add your handling code here:
+        int option = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirm delete", JOptionPane.OK_CANCEL_OPTION);
+        
+        if(option != JOptionPane.OK_OPTION){
+            return;
+        } 
+        
+        if(this.contactDAOImpl.deleteContact(this.phoneNumber) == true){
+            loadContacts("*");
+            JOptionPane.showMessageDialog(null, "Contact successfully deleted!", "System information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error encountered, contact not deleted!", "System information", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_pmnuiContactsDeleteActionPerformed
+
+    private void tblContactsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblContactsMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblContacts.getModel();
+        
+        this.phoneNumber = model.getValueAt(tblContacts.getSelectedRow(), 0).toString();
+        
+        pmnuContacts.show(evt.getComponent(), evt.getX(), evt.getY());
+    }//GEN-LAST:event_tblContactsMouseClicked
+
+    private void tfSearchGroupCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tfSearchGroupCaretUpdate
+        // TODO add your handling code here:
+        String keyword = tfSearchGroup.getText();
+        loadGroups(keyword);
+    }//GEN-LAST:event_tfSearchGroupCaretUpdate
+
+    private void tblGroupsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGroupsMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblGroups.getModel();
+        
+        this.groupId = model.getValueAt(tblGroups.getSelectedRow(), 0).toString();
+        
+        pmnuGroups.show(evt.getComponent(), evt.getX(), evt.getY());
+    }//GEN-LAST:event_tblGroupsMouseClicked
+
+    private void pmnuiGroupsEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmnuiGroupsEditActionPerformed
+        // TODO add your handling code here:
+        int index = groupDAOImpl.getIndex(this.groupId);
+        Group group = groupDAOImpl.getAllGroups().get(index);
+        
+        FrmGroupEdit frmGroupEdit = new FrmGroupEdit(this, true, group);
+        frmGroupEdit.setVisible(true);
+        
+        if(frmGroupEdit.getUpdated() == false){
+            return;
+        }
+        
+        if(this.groupDAOImpl.updateGroup(this.groupId, frmGroupEdit.getGroup()) == true){
+            loadGroups("*");
+            JOptionPane.showMessageDialog(null, "Group successfully updated!", "System information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error encountered, group not udpated!", "System information", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_pmnuiGroupsEditActionPerformed
+
+    private void pmnuiGroupsDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pmnuiGroupsDeleteActionPerformed
+        // TODO add your handling code here:
+        int option = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirm delete", JOptionPane.OK_CANCEL_OPTION);
+        
+        if(option != JOptionPane.OK_OPTION){
+            return;
+        } 
+        
+        if(this.groupDAOImpl.deleteGroup(this.groupId) == true){
+            loadGroups("*");
+            JOptionPane.showMessageDialog(null, "Group successfully deleted!", "System information", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error encountered, group not deleted!", "System information", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_pmnuiGroupsDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -63,12 +422,43 @@ public class FrmMain2 extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmMain2().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmMain2().setVisible(true));   
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNewContact;
+    private javax.swing.JButton btnNewGroup;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPopupMenu pmnuContacts;
+    private javax.swing.JPopupMenu pmnuGroups;
+    private javax.swing.JMenuItem pmnuiContactsDelete;
+    private javax.swing.JMenuItem pmnuiContactsEdit;
+    private javax.swing.JMenuItem pmnuiGroupsDelete;
+    private javax.swing.JMenuItem pmnuiGroupsEdit;
+    private javax.swing.JPanel pnlContacts;
+    private javax.swing.JPanel pnlGroups;
+    private javax.swing.JTable tblContacts;
+    private javax.swing.JTable tblGroups;
+    private javax.swing.JTextField tfSearchContact;
+    private javax.swing.JTextField tfSearchGroup;
     // End of variables declaration//GEN-END:variables
 
 }

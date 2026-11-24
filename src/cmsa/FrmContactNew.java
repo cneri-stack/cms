@@ -8,11 +8,13 @@ import cms.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+
 /**
  *
- * @author User
+ * @author fernandoenad
  */
 public class FrmContactNew extends javax.swing.JDialog {
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmContactNew.class.getName());
     private Contact contact = null;
     private List<Group> groups;
@@ -32,11 +34,11 @@ public class FrmContactNew extends javax.swing.JDialog {
         return this.contact;
     }
     
-    public void loadGroups(){
-        for(Group group : this.groups){
-            cbGroupId.addItem(group.getGroupId());
-        }
+    public void loadGroups() {
+    for (Group group : groups) {
+        cbGroupId.addItem(group.getGroupName());
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,11 +56,12 @@ public class FrmContactNew extends javax.swing.JDialog {
         tfPhoneNumber = new javax.swing.JTextField();
         tfFirstname = new javax.swing.JTextField();
         tfLastname = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
-        btnMouseEsports = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
         cbGroupId = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setText("Phone Number:");
 
@@ -72,13 +75,14 @@ public class FrmContactNew extends javax.swing.JDialog {
 
         tfLastname.addActionListener(this::tfLastnameActionPerformed);
 
-        btnSearch.setText("Save");
-        btnSearch.addActionListener(this::btnSearchActionPerformed);
+        btnSave.setText("Save");
+        btnSave.addActionListener(this::btnSaveActionPerformed);
 
-        btnMouseEsports.setText("Close");
-        btnMouseEsports.addActionListener(this::btnMouseEsportsActionPerformed);
+        btnClose.setText("Close");
+        btnClose.addActionListener(this::btnCloseActionPerformed);
 
-        cbGroupId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbGroupId.setSelectedItem(Group);
+        cbGroupId.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,9 +106,9 @@ public class FrmContactNew extends javax.swing.JDialog {
                         .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSearch)
+                                .addComponent(btnSave)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnMouseEsports))
+                                .addComponent(btnClose))
                             .addComponent(cbGroupId, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfLastname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(33, Short.MAX_VALUE))
@@ -130,8 +134,8 @@ public class FrmContactNew extends javax.swing.JDialog {
                     .addComponent(cbGroupId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSearch)
-                    .addComponent(btnMouseEsports))
+                    .addComponent(btnSave)
+                    .addComponent(btnClose))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -146,48 +150,51 @@ public class FrmContactNew extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfFirstnameActionPerformed
 
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
+        String selectedGroup = (String) cbGroupId.getSelectedItem();
+        String groupId = null;
+
+        for (Group g : groups) {
+           if (g.getGroupName().equals(selectedGroup)) {
+           groupId = g.getGroupId();
+           break;
+        }
+    }
+
+        if (groupId == null) {
+           JOptionPane.showMessageDialog(this, "Please select a valid group.");
+           return;
+        }
+        
         int option = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirm save", JOptionPane.OK_CANCEL_OPTION);
         
         if(option == JOptionPane.OK_OPTION){
-            String phoneNumber = tfPhoneNumber.getText();
-            String firstname = tfFirstname.getText();
-            String lastname = tfLastname.getText();
-            String groupId = cbGroupId.getSelectedItem().toString();
-            this.contact = new Contact(phoneNumber, firstname, lastname, groupId);
-            
+            contact = new Contact(
+            tfPhoneNumber.getText(),
+            tfFirstname.getText(),
+            tfLastname.getText(),
+            groupId
+            );
+  
             this.dispose();
-        } 
-    }//GEN-LAST:event_btnSearchActionPerformed
+        }  
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void btnMouseEsportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMouseEsportsActionPerformed
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }//GEN-LAST:event_btnMouseEsportsActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -215,11 +222,10 @@ public class FrmContactNew extends javax.swing.JDialog {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Group;
-    private javax.swing.JButton btnMouseEsports;
-    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> cbGroupId;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
