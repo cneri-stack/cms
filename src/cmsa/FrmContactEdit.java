@@ -5,6 +5,7 @@
 package cmsa;
 
 import cms.*;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,15 +17,19 @@ public class FrmContactEdit extends javax.swing.JDialog {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmContactEdit.class.getName());
     private Contact contact;
     private boolean updated=false;
+    private List<Group> groups;
 
     /**
      * Creates new form frmNewContact
      */
-    public FrmContactEdit(java.awt.Frame parent, boolean modal, Contact contact) {
+    public FrmContactEdit(java.awt.Frame parent, boolean modal, Contact contact, List<Group> groups) {
         super(parent, modal);
         initComponents();
         
         this.contact = contact;
+        this.groups = groups;
+        loadGroups();
+        
         loadContact();
     }
 
@@ -40,7 +45,15 @@ public class FrmContactEdit extends javax.swing.JDialog {
         tfPhoneNumber.setText(this.contact.getPhoneNumber());
         tfFirstname.setText(this.contact.getFirstname());
         tfLastname.setText(this.contact.getLastname());
+        cbGroupId.setSelectedItem(this.contact.getGroupId());
     }
+    
+    public void loadGroups(){
+        for(Group group : this.groups){
+            cbGroupId.addItem(group.getGroupName());
+        }
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,8 +88,6 @@ public class FrmContactEdit extends javax.swing.JDialog {
         tfFirstname.addActionListener(this::tfFirstnameActionPerformed);
 
         tfLastname.addActionListener(this::tfLastnameActionPerformed);
-
-        cbGroupId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(this::btnUpdateActionPerformed);
@@ -153,6 +164,9 @@ public class FrmContactEdit extends javax.swing.JDialog {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
+        Group selectedGroup = (Group) cbGroupId.getSelectedItem();
+        String groupId = selectedGroup.getGroupId();
+        
         int option = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirm update", JOptionPane.OK_CANCEL_OPTION);
         
         if(option == JOptionPane.OK_OPTION){
@@ -160,10 +174,10 @@ public class FrmContactEdit extends javax.swing.JDialog {
             String lastname = tfLastname.getText();
             this.contact.setFirstname(firstname);
             this.contact.setLastname(lastname);
-            
+            this.contact.setGroupId(groupId);
             this.updated=true;
             this.dispose();
-        }
+        } 
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -191,10 +205,23 @@ public class FrmContactEdit extends javax.swing.JDialog {
         //</editor-fold>
 
         /* Create and display the dialog */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                FrmContactEdit dialog = new FrmContactEdit(new javax.swing.JFrame(), true, null);
+                FrmContactEdit dialog = new FrmContactEdit(new javax.swing.JFrame(), true, null, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

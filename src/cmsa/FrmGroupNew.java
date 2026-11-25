@@ -112,7 +112,7 @@ public class FrmGroupNew extends javax.swing.JDialog {
             this.group = new Group(groupId, groupName);
             
             this.dispose();
-        }
+        } 
     }//GEN-LAST:event_btnSaveActionPerformed
 
     /**

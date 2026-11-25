@@ -34,11 +34,12 @@ public class FrmMain2 extends javax.swing.JFrame {
         
         if(keyword.equals("*")){
             for(Contact contact : this.contactDAOImpl.getAllContacts()){
+                int index = this.groupDAOImpl.getIndex(contact.getGroupId());
                 model.addRow(new Object[]{
                     contact.getPhoneNumber(), 
                     contact.getFirstname(), 
                     contact.getLastname(),
-                    contact.getGroupId()});
+                    this.groupDAOImpl.getAllGroups().get(index).getGroupName()});
             }
         } else {
             for(Contact contact : this.contactDAOImpl.searchContacts(keyword)){
@@ -69,6 +70,7 @@ public class FrmMain2 extends javax.swing.JFrame {
             }
         }
     }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -132,7 +134,7 @@ public class FrmMain2 extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Phone Number", "First Name", "Last Name", "Group Id"
+                "Phone Number", "First Name", "Last Name", "Group Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -311,7 +313,7 @@ public class FrmMain2 extends javax.swing.JFrame {
         int index = contactDAOImpl.getIndex(this.phoneNumber);
         Contact contact = contactDAOImpl.getAllContacts().get(index);
         
-        FrmContactEdit frmEditContact = new FrmContactEdit(this, true, contact);
+        FrmContactEdit frmEditContact = new FrmContactEdit(this, true, contact, this.groupDAOImpl.getAllGroups());
         frmEditContact.setVisible(true);
         
         if(frmEditContact.getUpdated() == false){
@@ -340,6 +342,7 @@ public class FrmMain2 extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Error encountered, contact not deleted!", "System information", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_pmnuiContactsDeleteActionPerformed
 
     private void tblContactsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblContactsMouseClicked

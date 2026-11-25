@@ -164,7 +164,7 @@
                         <Column editable="false" title="Phone Number" type="java.lang.Object"/>
                         <Column editable="false" title="First Name" type="java.lang.Object"/>
                         <Column editable="false" title="Last Name" type="java.lang.Object"/>
-                        <Column editable="false" title="Group Id" type="java.lang.Object"/>
+                        <Column editable="false" title="Group Name" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

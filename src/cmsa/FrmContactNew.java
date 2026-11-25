@@ -34,11 +34,11 @@ public class FrmContactNew extends javax.swing.JDialog {
         return this.contact;
     }
     
-    public void loadGroups() {
-    for (Group group : groups) {
-        cbGroupId.addItem(group.getGroupName());
+    public void loadGroups(){
+        for(Group group : this.groups){
+            cbGroupId.addItem(group.getGroupName());
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,6 +83,7 @@ public class FrmContactNew extends javax.swing.JDialog {
 
         cbGroupId.setSelectedItem(Group);
         cbGroupId.setToolTipText("");
+        cbGroupId.addActionListener(this::cbGroupIdActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,39 +153,30 @@ public class FrmContactNew extends javax.swing.JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        String selectedGroup = (String) cbGroupId.getSelectedItem();
-        String groupId = null;
-
-        for (Group g : groups) {
-           if (g.getGroupName().equals(selectedGroup)) {
-           groupId = g.getGroupId();
-           break;
-        }
-    }
-
-        if (groupId == null) {
-           JOptionPane.showMessageDialog(this, "Please select a valid group.");
-           return;
-        }
+        Group selectedGroup = (Group) cbGroupId.getSelectedItem();
         
         int option = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirm save", JOptionPane.OK_CANCEL_OPTION);
         
         if(option == JOptionPane.OK_OPTION){
-            contact = new Contact(
-            tfPhoneNumber.getText(),
-            tfFirstname.getText(),
-            tfLastname.getText(),
-            groupId
-            );
-  
-            this.dispose();
-        }  
+            String phoneNumber = tfPhoneNumber.getText();
+            String firstname = tfFirstname.getText();
+            String lastname = tfLastname.getText();
+            String groupId = selectedGroup.getGroupId();
+            this.contact = new Contact(phoneNumber, firstname, lastname, groupId);
+            
+            this.dispose(); 
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void cbGroupIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGroupIdActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_cbGroupIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -195,6 +187,19 @@ public class FrmContactNew extends javax.swing.JDialog {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -221,6 +226,7 @@ public class FrmContactNew extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
+    
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Group;
